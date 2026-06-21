@@ -39,6 +39,7 @@ class GoogleTranslateProvider(private val apiKey: String) : TranslationProvider 
         "pt_pt" -> "pt-PT"
         "zh_cn" -> "zh-CN"
         "zh_tw" -> "zh-TW"
+        "es_mx" -> "es-419"
         else -> mcCode.substringBefore('_')
     }
 }
@@ -47,6 +48,11 @@ fun toMcCode(providerCode: String): String {
     val normalized = providerCode.replace('-', '_').lowercase()
     return when (normalized) {
         "es" -> "es_es"
+        "es_419", "es_mx" -> "es_mx"
+        "es_es" -> "es_es"
+        "es_ar" -> "es_ar"
+        "es_uy" -> "es_uy"
+        "es_ve" -> "es_ve"
         "pt" -> "pt_br"
         "de" -> "de_de"
         "fr" -> "fr_fr"
