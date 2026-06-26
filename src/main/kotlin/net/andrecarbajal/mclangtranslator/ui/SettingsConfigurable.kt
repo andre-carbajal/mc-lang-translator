@@ -3,6 +3,7 @@ package net.andrecarbajal.mclangtranslator.ui
 import com.intellij.openapi.options.Configurable
 import com.intellij.openapi.ui.ComboBox
 import com.intellij.openapi.ui.Messages
+import com.intellij.util.ui.JBUI
 import net.andrecarbajal.mclangtranslator.providers.ProviderFactory
 import net.andrecarbajal.mclangtranslator.state.ApiKeyStore
 import net.andrecarbajal.mclangtranslator.state.McTranslatorState
@@ -10,7 +11,6 @@ import net.andrecarbajal.mclangtranslator.state.McTranslatorStateService
 import java.awt.BorderLayout
 import java.awt.GridBagConstraints
 import java.awt.GridBagLayout
-import java.awt.Insets
 import javax.swing.*
 
 class SettingsConfigurable : Configurable {
@@ -49,14 +49,14 @@ class SettingsConfigurable : Configurable {
                 gridx = 0
                 gridy = row
                 anchor = GridBagConstraints.WEST
-                insets = Insets(4, 4, 4, 8)
+                insets = JBUI.insets(4, 4, 4, 8)
             })
             form.add(component, GridBagConstraints().apply {
                 gridx = 1
                 gridy = row++
                 fill = GridBagConstraints.HORIZONTAL
                 weightx = 1.0
-                insets = Insets(4, 4, 4, 4)
+                insets = JBUI.insets(4)
             })
         }
 
@@ -64,6 +64,7 @@ class SettingsConfigurable : Configurable {
         addRow("Google API key:", googleKey)
         addRow("DeepL API key:", deeplKey)
         addRow("DeepL API host:", deeplApiHost)
+        addRow("DeepL API Free:", JLabel("Up to 500,000 characters/month; requires an API key"))
         addRow("DeepL formality:", deeplFormality)
         addRow("Microsoft API key:", microsoftKey)
         addRow("Microsoft region:", microsoftRegion)
@@ -76,7 +77,7 @@ class SettingsConfigurable : Configurable {
             gridx = 1
             gridy = row++
             anchor = GridBagConstraints.WEST
-            insets = Insets(4, 4, 4, 4)
+            insets = JBUI.insets(4)
         })
         form.add(JButton("Test connection").apply {
             addActionListener { testConnection() }
@@ -84,7 +85,7 @@ class SettingsConfigurable : Configurable {
             gridx = 1
             gridy = row
             anchor = GridBagConstraints.WEST
-            insets = Insets(8, 4, 4, 4)
+            insets = JBUI.insets(8, 4, 4, 4)
         })
         return form
     }

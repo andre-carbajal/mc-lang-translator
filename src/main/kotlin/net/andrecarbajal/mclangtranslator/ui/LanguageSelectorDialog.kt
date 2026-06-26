@@ -21,7 +21,7 @@ class LanguageSelectorDialog(
     private val state: McTranslatorState,
 ) : DialogWrapper(project) {
     private val checkboxPanel = JPanel().apply {
-        layout = javax.swing.BoxLayout(this, javax.swing.BoxLayout.Y_AXIS)
+        layout = BoxLayout(this, BoxLayout.Y_AXIS)
     }
     private val statusLabel = JLabel("Loading languages...")
     private val refreshButton = JButton("Refresh")
@@ -80,7 +80,7 @@ class LanguageSelectorDialog(
         ApplicationManager.getApplication().executeOnPooledThread {
             val loaded = try {
                 provider.getSupportedLanguages()
-            } catch (e: Exception) {
+            } catch (_: Exception) {
                 provider.fallbackLanguages()
             }
             cache.put(provider.key, loaded)

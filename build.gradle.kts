@@ -7,6 +7,7 @@ plugins {
 }
 
 dependencies {
+    implementation("com.deepl.api:deepl-java:1.16.0")
     implementation("com.google.code.gson:gson:2.14.0")
 
     testImplementation("junit:junit:4.13.2")

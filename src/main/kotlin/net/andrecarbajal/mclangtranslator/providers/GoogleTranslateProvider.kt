@@ -45,8 +45,7 @@ class GoogleTranslateProvider(private val apiKey: String) : TranslationProvider 
 }
 
 fun toMcCode(providerCode: String): String {
-    val normalized = providerCode.replace('-', '_').lowercase()
-    return when (normalized) {
+    return when (val normalized = providerCode.replace('-', '_').lowercase()) {
         "es" -> "es_es"
         "es_419", "es_mx" -> "es_mx"
         "es_es" -> "es_es"
