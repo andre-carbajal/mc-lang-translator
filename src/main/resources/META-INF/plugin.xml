@@ -19,9 +19,9 @@
                 bundle="messages.McLangTranslatorBundle"/>
     </extensions>
 
-    <actions>
+    <actions resource-bundle="messages.McLangTranslatorBundle">
         <action
-                id="McLangTranslator.TranslateLangFile"
+                id="net.andrecarbajal.mclangtranslator.TranslateLangFile"
                 class="net.andrecarbajal.mclangtranslator.actions.TranslateLangFileAction">
             <add-to-group group-id="ProjectViewPopupMenu" anchor="last"/>
         </action>
