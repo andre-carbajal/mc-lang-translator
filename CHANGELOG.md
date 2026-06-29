@@ -2,6 +2,20 @@
 
 # MC Lang Translator Changelog
 
+## [1.0.1]
+
+### Changed
+
+- Configure GitHub Actions publishing from version tags.
+- Use an explicit actions resource bundle and globally unique action ID.
+- Move translation action UI strings to the resource bundle.
+- Mark the translation action as dumb-aware so it remains valid during IDE indexing.
+
+### Fixed
+
+- Fix Marketplace/DevKit action metadata warnings for localized action text and description.
+- Fix plugin description generation by using the README as the Marketplace description.
+
 ## [1.0.0]
 
 ### Added

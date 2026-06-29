@@ -38,7 +38,8 @@ jobs:
           TAG_VERSION="${GITHUB_REF_NAME#v}"
           PROJECT_VERSION="$(grep '^version[[:space:]]*=' gradle.properties | cut -d'=' -f2 | xargs)"
           if [[ "$TAG_VERSION" != "$PROJECT_VERSION" ]]; then
-            echo "Tag version ($TAG_VERSION) must match gradle.properties version ($PROJECT_VERSION)."
+            echo "::error title=Version mismatch::Tag $GITHUB_REF_NAME expects gradle.properties version=$TAG_VERSION, but the checked-out commit has version=$PROJECT_VERSION."
+            echo "Fix: update gradle.properties and CHANGELOG.md, commit and push, then create a new tag that matches the Gradle version."
             exit 1
           fi
 
