@@ -2,29 +2,27 @@
     <id>net.andrecarbajal.mclangtranslator</id>
     <name>MC Lang Translator</name>
     <vendor>Andre Carbajal</vendor>
-    <description><![CDATA[
-        <p>Translate Minecraft mod language JSON files with Google Translate, DeepL, Microsoft Translator, or OpenAI-compatible AI APIs.</p>
-    ]]></description>
 
     <depends>com.intellij.modules.platform</depends>
+    <resource-bundle>messages.McLangTranslatorBundle</resource-bundle>
 
     <extensions defaultExtensionNs="com.intellij">
         <applicationService serviceImplementation="net.andrecarbajal.mclangtranslator.state.McTranslatorStateService"/>
         <applicationService serviceImplementation="net.andrecarbajal.mclangtranslator.cache.ProviderLanguageCache"/>
-        <notificationGroup id="MC Lang Translator" displayType="BALLOON"/>
+        <notificationGroup id="MC Lang Translator" displayType="BALLOON" bundle="messages.McLangTranslatorBundle"
+                           key="notification.group.mc.lang.translator"/>
         <applicationConfigurable
                 parentId="tools"
                 instance="net.andrecarbajal.mclangtranslator.ui.SettingsConfigurable"
                 id="net.andrecarbajal.mclangtranslator.settings"
-                displayName="MC Lang Translator"/>
+                key="settings.displayName"
+                bundle="messages.McLangTranslatorBundle"/>
     </extensions>
 
     <actions>
         <action
                 id="McLangTranslator.TranslateLangFile"
-                class="net.andrecarbajal.mclangtranslator.actions.TranslateLangFileAction"
-                text="Translate lang file..."
-                description="Translate this Minecraft lang JSON to other languages">
+                class="net.andrecarbajal.mclangtranslator.actions.TranslateLangFileAction">
             <add-to-group group-id="ProjectViewPopupMenu" anchor="last"/>
         </action>
     </actions>

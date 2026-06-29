@@ -1,4 +1,5 @@
 import org.jetbrains.intellij.platform.gradle.TestFrameworkType
+import org.gradle.api.Project
 
 plugins {
     id("org.jetbrains.kotlin.jvm")
@@ -18,3 +19,69 @@ dependencies {
         testFramework(TestFrameworkType.Platform)
     }
 }
+
+intellijPlatform {
+    pluginConfiguration {
+        description = provider {
+            project.readmeAsPluginDescription()
+        }
+    }
+}
+
+fun Project.readmeAsPluginDescription(): String {
+    val lines = layout.projectDirectory.file("README.md").asFile.readLines()
+    val html = StringBuilder()
+    var inList = false
+    var inCodeBlock = false
+
+    fun closeList() {
+        if (inList) {
+            html.append("</ul>\n")
+            inList = false
+        }
+    }
+
+    lines.forEach { line ->
+        val trimmed = line.trim()
+        when {
+            trimmed.startsWith("```") -> {
+                closeList()
+                inCodeBlock = !inCodeBlock
+            }
+
+            inCodeBlock -> Unit
+
+            trimmed.startsWith("# ") -> {
+                closeList()
+                html.append("<h1>").append(trimmed.removePrefix("# ").escapeHtml()).append("</h1>\n")
+            }
+
+            trimmed.startsWith("## ") -> {
+                closeList()
+                html.append("<h2>").append(trimmed.removePrefix("## ").escapeHtml()).append("</h2>\n")
+            }
+
+            trimmed.startsWith("- ") -> {
+                if (!inList) {
+                    html.append("<ul>\n")
+                    inList = true
+                }
+                html.append("<li>").append(trimmed.removePrefix("- ").escapeHtml()).append("</li>\n")
+            }
+
+            trimmed.isBlank() -> closeList()
+
+            else -> {
+                closeList()
+                html.append("<p>").append(trimmed.escapeHtml()).append("</p>\n")
+            }
+        }
+    }
+    closeList()
+    return html.toString().trim()
+}
+
+fun String.escapeHtml(): String =
+    replace("&", "&amp;")
+        .replace("<", "&lt;")
+        .replace(">", "&gt;")
