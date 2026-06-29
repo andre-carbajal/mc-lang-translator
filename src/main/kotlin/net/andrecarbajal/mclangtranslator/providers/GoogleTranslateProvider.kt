@@ -18,7 +18,12 @@ class GoogleTranslateProvider(private val apiKey: String) : TranslationProvider 
         }.distinctBy { it.mcCode }.sortedBy { it.displayName }
     }
 
-    override fun translate(text: String, sourceLang: String, targetLang: String): String {
+    override fun translate(
+        text: String,
+        sourceLang: String,
+        targetLang: String,
+        context: TranslationContext,
+    ): String {
         val body = GsonProvider.gson.toJson(
             mapOf("q" to text, "source" to sourceLang, "target" to targetLang, "format" to "text"),
         )

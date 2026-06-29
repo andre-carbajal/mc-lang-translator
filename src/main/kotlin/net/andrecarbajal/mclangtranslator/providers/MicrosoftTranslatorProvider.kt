@@ -20,7 +20,12 @@ class MicrosoftTranslatorProvider(
         }.distinctBy { it.mcCode }.sortedBy { it.displayName }
     }
 
-    override fun translate(text: String, sourceLang: String, targetLang: String): String {
+    override fun translate(
+        text: String,
+        sourceLang: String,
+        targetLang: String,
+        context: TranslationContext,
+    ): String {
         val url = "https://api.cognitive.microsofttranslator.com/translate" +
                 "?api-version=3.0&from=${HttpJsonClient.encode(sourceLang)}&to=${HttpJsonClient.encode(targetLang)}"
         val headers = mutableMapOf(

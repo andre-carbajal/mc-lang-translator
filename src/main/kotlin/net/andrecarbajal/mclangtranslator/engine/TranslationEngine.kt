@@ -4,6 +4,7 @@ import com.intellij.openapi.progress.ProcessCanceledException
 import com.intellij.openapi.progress.ProgressIndicator
 import com.intellij.openapi.vfs.VirtualFile
 import net.andrecarbajal.mclangtranslator.providers.McLocale
+import net.andrecarbajal.mclangtranslator.providers.TranslationContext
 import net.andrecarbajal.mclangtranslator.providers.TranslationException
 import net.andrecarbajal.mclangtranslator.providers.TranslationProvider
 import net.andrecarbajal.mclangtranslator.state.McTranslatorState
@@ -59,6 +60,11 @@ class TranslationEngine {
                         text = protected.text,
                         sourceLang = sourceProviderCode,
                         targetLang = targetLocale.providerCode,
+                        context = TranslationContext(
+                            jsonKey = key,
+                            sourceMcLocale = job.sourceLocale,
+                            targetMcLocale = targetLocale.mcCode,
+                        ),
                         delayMs = job.settings.requestDelayMs,
                         indicator = indicator,
                     )
@@ -80,6 +86,7 @@ class TranslationEngine {
         text: String,
         sourceLang: String,
         targetLang: String,
+        context: TranslationContext,
         delayMs: Long,
         indicator: ProgressIndicator,
     ): String {
@@ -89,7 +96,7 @@ class TranslationEngine {
             checkCanceled(indicator)
             if (waitMs > 0) Thread.sleep(waitMs)
             try {
-                return provider.translate(text, sourceLang, targetLang)
+                return provider.translate(text, sourceLang, targetLang, context)
             } catch (e: TranslationException) {
                 lastError = e
                 waitMs = if (waitMs == 0L) 250L else waitMs * 2

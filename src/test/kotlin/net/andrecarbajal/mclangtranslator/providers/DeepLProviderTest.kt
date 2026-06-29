@@ -1,9 +1,7 @@
 package net.andrecarbajal.mclangtranslator.providers
 
 import com.deepl.api.Formality
-import junit.framework.TestCase.assertEquals
-import junit.framework.TestCase.assertNull
-import junit.framework.TestCase.assertTrue
+import junit.framework.TestCase.*
 import org.junit.Test
 
 class DeepLProviderTest {
@@ -48,6 +46,25 @@ class DeepLProviderTest {
     }
 
     @Test
+    fun `translate passes minecraft context option`() {
+        val adapter = FakeDeepLClientAdapter(translation = "Miel")
+        val provider = providerWith(adapter = adapter)
+
+        provider.translate(
+            text = "Honey",
+            sourceLang = "en",
+            targetLang = "es",
+            context = TranslationContext(
+                jsonKey = "item.demo.honey",
+                sourceMcLocale = "en_us",
+                targetMcLocale = "es_es",
+            ),
+        )
+
+        assertTrue(adapter.lastContext?.jsonKey == "item.demo.honey")
+    }
+
+    @Test
     fun `translate wraps sdk errors in translation exception`() {
         val provider = providerWith(adapter = FakeDeepLClientAdapter(error = IllegalStateException("boom")))
 
@@ -86,6 +103,7 @@ class DeepLProviderTest {
         var lastSourceLang: String? = null
         var lastTargetLang: String? = null
         var lastFormality: Formality? = null
+        var lastContext: TranslationContext? = null
 
         override fun getTargetLanguages(): List<DeepLLanguageInfo> {
             languageError?.let { throw it }
@@ -97,11 +115,13 @@ class DeepLProviderTest {
             sourceLang: String,
             targetLang: String,
             formality: Formality?,
+            context: TranslationContext,
         ): String {
             error?.let { throw it }
             lastSourceLang = sourceLang
             lastTargetLang = targetLang
             lastFormality = formality
+            lastContext = context
             return translation
         }
     }

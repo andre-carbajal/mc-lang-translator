@@ -23,13 +23,19 @@ class DeepLProvider(
         }.getOrElse { fallbackLanguages() }
     }
 
-    override fun translate(text: String, sourceLang: String, targetLang: String): String {
+    override fun translate(
+        text: String,
+        sourceLang: String,
+        targetLang: String,
+        context: TranslationContext,
+    ): String {
         return try {
             clientAdapter.translateText(
                 text = text,
                 sourceLang = sourceLang.uppercase(),
                 targetLang = targetLang.uppercase(),
                 formality = formality.toDeepLFormality(),
+                context = context,
             )
         } catch (e: InterruptedException) {
             Thread.currentThread().interrupt()
@@ -63,6 +69,7 @@ interface DeepLClientAdapter {
         sourceLang: String,
         targetLang: String,
         formality: Formality?,
+        context: TranslationContext,
     ): String
 }
 
@@ -87,13 +94,14 @@ private class SdkDeepLClientAdapter(apiKey: String, apiHost: String) : DeepLClie
         sourceLang: String,
         targetLang: String,
         formality: Formality?,
+        context: TranslationContext,
     ): String {
-        val result = if (formality == null) {
-            client.translateText(text, sourceLang, targetLang)
-        } else {
-            val options = TextTranslationOptions().setFormality(formality)
-            client.translateText(text, sourceLang, targetLang, options)
+        val options = TextTranslationOptions()
+        formality?.let { options.setFormality(it) }
+        if (context.jsonKey.isNotBlank()) {
+            options.setContext(context.minecraftHint())
         }
+        val result = client.translateText(text, sourceLang, targetLang, options)
         return result.text
     }
 }
